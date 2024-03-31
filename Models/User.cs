@@ -27,5 +27,15 @@ namespace CompleteDeveloperNetworkWebApp.Models
             Hobby = hobby;
             SkillSets = skillSets;
         }
+
+        public User(int id, string username, string mail, string phoneNumber, List<Skill> skillSets, string hobby)
+        {
+            Id = id;
+            Username = username;
+            Mail = mail;
+            PhoneNumber = phoneNumber;
+            SkillSets = skillSets;
+            Hobby = hobby;
+        }
     }
 }

@@ -19,7 +19,8 @@ namespace CompleteDeveloperNetworkWebApp.Controllers
 
         private readonly ISkillService _skillService;
 
-        public UsersController(ILogger<UsersController> logger, IUserService userService, ISkillService skillService) {
+        public UsersController(ILogger<UsersController> logger, IUserService userService, ISkillService skillService)
+        {
             _logger = logger;
             _userService = userService;
             _skillService = skillService;
@@ -98,7 +99,7 @@ namespace CompleteDeveloperNetworkWebApp.Controllers
                 user.Hobby);
 
             _logger.LogInformation("Post(requestDto={}) END, response={}", requestDto, responseDto);
-            return CreatedAtAction(nameof(Get), new { id = responseDto.Id}, responseDto);
+            return CreatedAtAction(nameof(Get), new { id = responseDto.Id }, responseDto);
         }
 
         // PUT api/users/5
@@ -108,44 +109,47 @@ namespace CompleteDeveloperNetworkWebApp.Controllers
             _logger.LogInformation("Put(id={}, requestDto={})", id, requestDto);
 
             var user = _userService.Get(id);
-            UpdateUserResponseDto responseDto;
-
-            if (user == null)
-            {
-                var skillSets = requestDto.SkillSets.Select((skillName) => new Skill { Name = skillName }).ToList();
-
-                user = new User(
+            var skillSets = requestDto.SkillSets.Select((skillName) => new Skill { Name = skillName }).ToList();
+            var newUser = new User(
+                    id,
                     requestDto.Username,
                     requestDto.Mail,
                     requestDto.PhoneNumber,
                     skillSets,
                     requestDto.Hobby);
 
-                _userService.Create(user);
+            UpdateUserResponseDto responseDto;
+
+            if (user == null)
+            {
+                newUser.Id = id;
+                _userService.Create(newUser);
 
                 responseDto = new UpdateUserResponseDto(
-                    user.Id,
-                    user.Username,
-                    user.Mail,
-                    user.PhoneNumber,
-                    user.SkillSets,
-                    user.Hobby);
+                    newUser.Id,
+                    newUser.Username,
+                    newUser.Mail,
+                    newUser.PhoneNumber,
+                    newUser.SkillSets,
+                    newUser.Hobby);
 
                 _logger.LogInformation("Put(id={}, requestDto={}) END, created, response={})", id, requestDto, responseDto);
                 return CreatedAtAction(nameof(Get), new { id = responseDto.Id }, responseDto);
             }
 
-            user = _userService.Update(id, user);
+            _userService.Delete(id);
+            _userService.Create(newUser);
+
             responseDto = new UpdateUserResponseDto(
-                user.Id,
-                user.Username,
-                user.Mail,
-                user.PhoneNumber,
-                user.SkillSets,
-                user.Hobby);
+                newUser.Id,
+                newUser.Username,
+                newUser.Mail,
+                newUser.PhoneNumber,
+                newUser.SkillSets,
+                newUser.Hobby);
 
             _logger.LogInformation("Put(id={}, requestDto={}) END, updated, response={})", id, requestDto, responseDto);
-            return Ok(user);    
+            return Ok(newUser);
         }
 
         // DELETE api/users/5

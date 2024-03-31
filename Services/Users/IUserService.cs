@@ -1,4 +1,5 @@
 ﻿using CompleteDeveloperNetworkWebApp.Models;
+using System.Diagnostics.Eventing.Reader;
 
 namespace CompleteDeveloperNetworkWebApp.Services.Users
 {

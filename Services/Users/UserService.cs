@@ -18,7 +18,7 @@ namespace CompleteDeveloperNetworkWebApp.Services.Users
         public List<User> GetAll()
         {
             _logger.LogInformation("GetAll()");
-            return _dbContext.Users.ToList();
+            return _dbContext.Users.Include(user => user.SkillSets).ToList();
         }
         public User? Get(long id)
         {
@@ -42,7 +42,7 @@ namespace CompleteDeveloperNetworkWebApp.Services.Users
  
             if (user == null)
             {
-                throw new Exception();
+                throw new ArgumentNullException("User(id={}) does not exist.");
             }
 
             _dbContext.Entry(user).CurrentValues.SetValues(newUser);
