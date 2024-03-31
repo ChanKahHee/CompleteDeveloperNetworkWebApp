@@ -22,4 +22,4 @@ RUN dotnet publish "./CompleteDeveloperNetworkWebApp.csproj" -c $BUILD_CONFIGURA
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "CompleteDeveloperNetworkWebApp.dll"]
+ENTRYPOINT ["dotnet", "CompleteDeveloperNetworkWebApp.dll", ""]
